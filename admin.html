@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin – Score Update</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <h1>🔐 Admin Score Update</h1>
+
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
+    <br><br>
+    <button onclick="login()">Login</button>
+    <p id="loginError" style="color:red;"></p>
+  </div>
+
+  <!-- ADMIN PANEL -->
+  <div id="adminPanel" style="display:none;">
+    <h2>Update Total Scores</h2>
+
+    <label>Sapphire</label>
+    <input type="number" id="sapphire" value="0"/>
+
+    <label>Crystal</label>
+    <input type="number" id="crystal" value="0"/>
+
+    <label>Opal</label>
+    <input type="number" id="opal" value="0"/>
+
+    <label>Diamond</label>
+    <input type="number" id="diamond" value="0"/>
+
+    <br><br>
+    <button onclick="updateScores()">Update Scores</button>
+    <p id="status"></p>
+  </div>
+
+  <script type="module" src="js/admin.js"></script>
+</body>
+</html>
