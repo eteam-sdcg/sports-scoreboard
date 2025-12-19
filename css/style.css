@@ -1,74 +1,194 @@
+/* =====================
+   GLOBAL RESET
+===================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* =====================
+   BODY BACKGROUND
+===================== */
 body {
-  font-family: Arial, sans-serif;
+  min-height: 100vh;
+  background: radial-gradient(circle at top left, #0b1a4a, #050b2e);
+  font-family: 'Montserrat', sans-serif;
+  color: white;
+  overflow-x: hidden;
+}
+
+/* =====================
+   MAIN CONTAINER
+===================== */
+.container {
+  max-width: 420px;
+  margin: auto;
+  padding: 20px;
+  position: relative;
+}
+
+/* =====================
+   TOP LOGO (eTeam)
+===================== */
+.logo-top {
+  position: absolute;
+  top: 22px;
+  left: 7px;
+}
+
+.logo-top img {
+  width: 100px;
+}
+
+/* =====================
+   ATHLETIC LOGO
+   (BACKGROUND DECOR)
+===================== */
+.athletic-bg {
+  position: absolute;
+  top: 160px;
+  left: -120px;
+  width: 480px;
+  opacity: 0.35;
+  z-index: 2;
+  animation: floatLogo 12s ease-in-out infinite;
+}
+
+@keyframes floatLogo {
+  0% { transform: translateY(0); }
+  50% { transform: translateY(20px); }
+  100% { transform: translateY(0); }
+}
+
+/* =====================
+   TITLES
+===================== */
+.title {
   text-align: center;
-  background: #f0f8ff;
-  color: #333;
+  margin-top: 85px;
+  position: relative;
+  z-index: 2;
 }
 
-h1 {
-  margin-top: 30px;
+.title .small {
+  letter-spacing: 7px;
+  font-size: 15px;
 }
 
-.scoreboard {
-  margin-top: 50px;
-  font-size: 2rem;
-}
-
-.house {
-  margin: 20px 0;
-  padding: 15px;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #ff9a9e, #fad0c4);
-  transition: all 0.5s ease;
-}
-
-/* Rank change animations */
-.move-up {
-  animation: moveUp 0.8s ease;
-  box-shadow: 0 0 15px #22c55e;
-}
-
-.move-down {
-  animation: moveDown 0.8s ease;
-  box-shadow: 0 0 15px #ef4444;
-}
-
-@keyframes moveUp {
-  from {
-    transform: translateY(30px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-
-@keyframes moveDown {
-  from {
-    transform: translateY(-30px);
-  }
-  to {
-    transform: translateY(0);
-  }
-}
-#leaderBanner {
-  margin: 15px auto;
-  padding: 12px 20px;
-  max-width: 500px;
-  background: linear-gradient(90deg, #22c55e, #16a34a);
-  color: #fff;
-  font-size: 20px;
+.title .main {
+  margin-top: 12px;
+  font-family: 'Franklin Gothic Demi', sans-serif;
+  font-size: 40px;
   font-weight: bold;
-  border-radius: 12px;
-  animation: popIn 0.6s ease;
 }
 
-@keyframes popIn {
+/* =====================
+   SCORE LIST
+===================== */
+.scoreboard {
+  margin-top: 45px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  position: relative;
+  z-index: 2;
+ }
+
+/* =====================
+   SCORE ROW
+===================== */
+.house {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 14px 18px;
+  border-radius: 40px;
+  font-family: "Bell MT", serif;
+  font-size: 25px;
+}
+
+/* =====================
+   SCORE VALUE
+===================== */
+.score {
+  background: white;
+  color: black;
+  padding: 6px 14px;
+  border-radius: 25px;
+  font-weight: bold;
+}
+
+/* =====================
+   HOUSE COLORS
+===================== */
+.opal {
+  background: #6a1bb1;
+}
+
+.crystal {
+  background: #e31818;
+}
+
+.diamond {
+  background: #ffcc00;
+  color: black;
+}
+
+.sapphire {
+  background: #0d2bff;
+}
+
+/* =====================
+   FOOTER LOGO
+===================== */
+.footer-logo {
+  position: fixed;
+  bottom: 15px;
+  right: 15px;
+}
+
+.footer-logo img {
+  width: 55px;
+}
+
+/* =====================
+   DESKTOP SUPPORT
+===================== */
+@media (min-width: 768px) {
+  .container {
+    max-width: 520px;
+  }
+
+  .athletic-bg {
+    width: 520px;
+    left: -180px;
+  }
+
+  .title .main {
+    font-size: 38px;
+  }
+}
+/* =====================
+   RANK MOVE ANIMATION
+===================== */
+.house {
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+}
+
+/* =====================
+   FIRST PLACE GLOW
+===================== */
+.house.first {
+  box-shadow: 0 0 25px 8px rgba(255, 191, 0, 0.8);
+  animation: glow 4s infinite alternate;
+}
+
+@keyframes glow {
   from {
-    transform: scale(0.9);
-    opacity: 0;
+    box-shadow: 0 0 15px 4px rgb(255, 255, 255);
   }
   to {
-    transform: scale(1);
-    opacity: 1;
+    box-shadow: 0 0 20px 10px rgb(255, 251, 0);
   }
 }
