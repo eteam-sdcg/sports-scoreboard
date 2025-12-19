@@ -1,55 +1,105 @@
-import { db } from "./firebase.js";
-import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getDatabase, ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const scoreboard = document.getElementById("scoreboard");
+const firebaseConfig = {
+  apiKey: "AIzaSyA-NIELoMlHeAOQ04hhOqMxuXIlgUmAnPs",
+  authDomain: "sports-live-scoreboard.firebaseapp.com",
+  databaseURL: "https://sports-live-scoreboard-default-rtdb.firebaseio.com",
+  projectId: "sports-live-scoreboard",
+  storageBucket: "sports-live-scoreboard.firebasestorage.app",
+  messagingSenderId: "467601433134",
+  appId: "1:467601433134:web:59ae2c876b62e5c3d575bf"
+};
 
-const leaderBanner = document.getElementById("leaderBanner");
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
 
-
-// Store previous ranks
+const board = document.querySelector(".scoreboard");
 let previousRanks = {};
 
-const scoresRef = ref(db, "totalScores");
+const rankSound = document.getElementById("rankSound");
+let userInteracted = false;
 
-onValue(scoresRef, (snapshot) => {
+// allow sound after first click/touch
+document.addEventListener("click", () => {
+  userInteracted = true;
+}, { once: true });
+
+
+// DOM references
+const houseEls = {
+  opal: document.querySelector(".house.opal"),
+  crystal: document.querySelector(".house.crystal"),
+  diamond: document.querySelector(".house.diamond"),
+  sapphire: document.querySelector(".house.sapphire")
+};
+
+// listen scores
+onValue(ref(db, "totalScores"), (snapshot) => {
   const data = snapshot.val();
   if (!data) return;
 
+  // convert to array
+  const houses = Object.keys(data).map(key => ({
+    key,
+    score: data[key]
+  }));
 
-  // Sort by score (high → low)
-  const sorted = Object.entries(data).sort((a, b) => b[1] - a[1]);
+  // sort high → low
+  houses.sort((a, b) => b.score - a.score);
 
-// Show leader banner
-const [leaderHouse, leaderScore] = sorted[0];
-leaderBanner.innerHTML = `🏆 TODAY'S LEADER: ${leaderHouse.toUpperCase()} – ${leaderScore} POINTS`;
+  // remove old first class
+  Object.values(houseEls).forEach(el => el.classList.remove("first"));
 
+  // render order + animation
+  houses.forEach((house, index) => {
+    const el = houseEls[house.key];
+    const scoreEl = el.querySelector(".score");
 
-  scoreboard.innerHTML = "";
+    // rank movement animation
+if (previousRanks[house.key] !== undefined) {
+  const diff = previousRanks[house.key] - index;
 
-  sorted.forEach(([house, score], index) => {
-    const currentRank = index + 1;
-    const prevRank = previousRanks[house];
-
-    const card = document.createElement("div");
-    card.className = `card ${house} ${index === 0 ? "leader" : ""}`;
-
-    // Detect movement
-    if (prevRank) {
-      if (currentRank < prevRank) {
-        card.classList.add("move-up");
-      } else if (currentRank > prevRank) {
-        card.classList.add("move-down");
-      }
+  if (diff !== 0) {
+    // play sound once per update
+    if (userInteracted) {
+      rankSound.currentTime = 0;
+      rankSound.play();
     }
 
-    card.innerHTML = `
-      <span>${currentRank}. ${house.toUpperCase()}</span>
-      <strong>${score}</strong>
-    `;
+    el.style.transform = `translateY(${diff * 20}px)`;
+    setTimeout(() => {
+      el.style.transform = "translateY(0)";
+    }, 50);
+  }
+}
 
-    scoreboard.appendChild(card);
 
-    // Save rank for next update
-    previousRanks[house] = currentRank;
+    // move element in DOM
+    board.appendChild(el);
+
+    // smooth score count-up
+    animateNumber(scoreEl, Number(scoreEl.textContent), house.score);
+
+    // first place glow
+    if (index === 0) {
+      el.classList.add("first");
+    }
+
+    previousRanks[house.key] = index;
   });
 });
+
+// smooth number animation
+function animateNumber(el, start, end) {
+  const duration = 800;
+  const startTime = performance.now();
+
+  function update(now) {
+    const progress = Math.min((now - startTime) / duration, 1);
+    el.textContent = Math.floor(start + (end - start) * progress);
+    if (progress < 1) requestAnimationFrame(update);
+  }
+
+  requestAnimationFrame(update);
+}
