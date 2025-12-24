@@ -1,0 +1,124 @@
+/* RESET */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Segoe UI", Arial, sans-serif;
+}
+
+/* PAGE BACKGROUND */
+body {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #0b1a3a, #020617);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 20px;
+  color: #ffffff;
+}
+
+/* MAIN ADMIN CONTAINER */
+.admin-container {
+  width: 100%;
+  max-width: 520px;
+  background: rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 22px;
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(10px);
+}
+
+/* TITLE */
+.admin-title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 700;
+  margin-bottom: 18px;
+}
+
+/* SUB TITLE */
+.admin-subtitle {
+  font-size: 15px;
+  opacity: 0.85;
+  margin-bottom: 16px;
+}
+
+/* FORM GRID */
+.score-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+/* FULL WIDTH ON SMALL */
+.score-form .full {
+  grid-column: span 2;
+}
+
+/* LABEL */
+.score-form label {
+  font-size: 13px;
+  margin-bottom: 4px;
+  display: block;
+  opacity: 0.9;
+}
+
+/* INPUT */
+.score-form input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  background: #ffffff;
+  color: #000;
+}
+
+/* INPUT FOCUS */
+.score-form input:focus {
+  outline: 2px solid #4f8cff;
+}
+
+/* BUTTON */
+.update-btn {
+  grid-column: span 2;
+  margin-top: 10px;
+  padding: 12px;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #2563eb, #1e40af);
+  color: #fff;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+/* BUTTON HOVER */
+.update-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 15px rgba(37, 99, 235, 0.45);
+}
+
+/* MOBILE OPTIMIZATION */
+@media (max-width: 480px) {
+  .admin-container {
+    padding: 18px;
+  }
+
+  .admin-title {
+    font-size: 20px;
+  }
+
+  .score-form {
+    grid-template-columns: 1fr;
+  }
+
+  .score-form .full,
+  .update-btn {
+    grid-column: span 1;
+  }
+}
