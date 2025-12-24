@@ -2,43 +2,79 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Admin – Score Update</title>
+
+  <!-- Main site styles (if needed) -->
   <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Admin clean design -->
+  <link rel="stylesheet" href="admin.css" />
 </head>
+
 <body>
 
-  <h1>🔐 Admin Score Update</h1>
+  <!-- LOGIN BOX -->
+  <div class="admin-container" id="loginBox">
+    <div class="admin-title">🔐 Admin Login</div>
+    <div class="admin-subtitle">Enter admin password to continue</div>
 
-  <!-- LOGIN -->
-  <div id="loginBox">
-    <input type="password" id="adminPassword" placeholder="Enter Admin Password" />
-    <br><br>
-    <button onclick="login()">Login</button>
-    <p id="loginError" style="color:red;"></p>
+    <form class="score-form" onsubmit="event.preventDefault(); login();">
+      <div class="full">
+        <label for="adminPassword">Admin Password</label>
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Enter Admin Password"
+          required
+        />
+      </div>
+
+      <button class="update-btn" type="submit">
+        Login
+      </button>
+    </form>
+
+    <p id="loginError" style="color:#ff6b6b; margin-top:10px;"></p>
   </div>
 
   <!-- ADMIN PANEL -->
-  <div id="adminPanel" style="display:none;">
-    <h2>Update Total Scores</h2>
+  <div class="admin-container" id="adminPanel" style="display:none; margin-top:20px;">
+    <div class="admin-title">📊 Admin Score Update</div>
+    <div class="admin-subtitle">Update Total Scores</div>
 
-    <label>Sapphire</label>
-    <input type="number" id="sapphire" value="0"/>
+    <form class="score-form" onsubmit="event.preventDefault(); updateScores();">
 
-    <label>Crystal</label>
-    <input type="number" id="crystal" value="0"/>
+      <div>
+        <label for="sapphire">Sapphire</label>
+        <input type="number" id="sapphire" value="0" />
+      </div>
 
-    <label>Opal</label>
-    <input type="number" id="opal" value="0"/>
+      <div>
+        <label for="crystal">Crystal</label>
+        <input type="number" id="crystal" value="0" />
+      </div>
 
-    <label>Diamond</label>
-    <input type="number" id="diamond" value="0"/>
+      <div>
+        <label for="opal">Opal</label>
+        <input type="number" id="opal" value="0" />
+      </div>
 
-    <br><br>
-    <button onclick="updateScores()">Update Scores</button>
-    <p id="status"></p>
+      <div>
+        <label for="diamond">Diamond</label>
+        <input type="number" id="diamond" value="0" />
+      </div>
+
+      <button class="update-btn" type="submit">
+        Update Scores
+      </button>
+    </form>
+
+    <p id="status" style="margin-top:12px;"></p>
   </div>
 
+  <!-- ADMIN JS -->
   <script type="module" src="js/admin.js"></script>
+
 </body>
 </html>
