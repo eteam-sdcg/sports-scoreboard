@@ -41,7 +41,7 @@ window.updateScores = function () {
     diamond: Number(document.getElementById("diamond").value)
   };
 
-  set(ref(db, "totalScores"), newScores)
+  set(ref(db, "score"), newScore);
     .then(() => {
       status.textContent = "Scores updated successfully ✅";
       status.style.color = "green";
@@ -51,3 +51,4 @@ window.updateScores = function () {
       status.style.color = "red";
     });
 };
+
