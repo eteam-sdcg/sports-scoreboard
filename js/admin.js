@@ -40,9 +40,8 @@ window.updateScores = function () {
     opal: Number(document.getElementById("opal").value),
     diamond: Number(document.getElementById("diamond").value)
   };
-
-  set(ref(db, "score"), newScore);
-    .then(() => {
+set(ref(db, "totalScores"), newScores)
+     .then(() => {
       status.textContent = "Scores updated successfully ✅";
       status.style.color = "green";
     })
@@ -51,4 +50,5 @@ window.updateScores = function () {
       status.style.color = "red";
     });
 };
+
 
