@@ -1,6 +1,8 @@
 import { db } from "./firebase.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
+const container = document.querySelector(".scoreboard");
+
 const houses = {
   opal: document.querySelector(".house.opal"),
   crystal: document.querySelector(".house.crystal"),
@@ -8,54 +10,46 @@ const houses = {
   sapphire: document.querySelector(".house.sapphire"),
 };
 
-const scores = {
-  opal: houses.opal.querySelector(".score"),
-  crystal: houses.crystal.querySelector(".score"),
-  diamond: houses.diamond.querySelector(".score"),
-  sapphire: houses.sapphire.querySelector(".score"),
-};
-
 const scoresRef = ref(db, "totalScores");
-
-// Track previous order
-let previousOrder = [];
 
 onValue(scoresRef, (snapshot) => {
   const data = snapshot.val();
   if (!data) return;
 
-  // Update numbers
-  Object.keys(scores).forEach((key) => {
-    scores[key].textContent = data[key] ?? 0;
+  // 1️⃣ record old positions
+  const firstPos = {};
+  Object.keys(houses).forEach(k => {
+    houses[k].classList.remove("first", "moving-up", "moving-down");
+    firstPos[k] = houses[k].getBoundingClientRect().top;
   });
 
-  // Sort by score (high → low)
+  // 2️⃣ update numbers
+  Object.keys(houses).forEach(k => {
+    houses[k].querySelector(".score").textContent = data[k] ?? 0;
+  });
+
+  // 3️⃣ sort by score
   const sorted = Object.keys(houses)
-    .map((key) => ({
-      key,
-      score: data[key] ?? 0,
-    }))
+    .map(k => ({ key: k, score: data[k] ?? 0 }))
     .sort((a, b) => b.score - a.score);
 
-  const currentOrder = sorted.map(item => item.key);
+  // 4️⃣ reorder DOM
+  sorted.forEach(item => container.appendChild(houses[item.key]));
 
-  // Apply animation direction
-  currentOrder.forEach((key, newIndex) => {
-    const oldIndex = previousOrder.indexOf(key);
+  // 5️⃣ animate movement (FLIP)
+  sorted.forEach(item => {
+    const el = houses[item.key];
+    const last = el.getBoundingClientRect().top;
+    const delta = firstPos[item.key] - last;
 
-    houses[key].classList.remove("moving-up", "moving-down");
-
-    if (oldIndex !== -1) {
-      if (newIndex < oldIndex) {
-        houses[key].classList.add("moving-up");
-      } else if (newIndex > oldIndex) {
-        houses[key].classList.add("moving-down");
-      }
+    if (delta !== 0) {
+      el.style.transform = `translateY(${delta}px)`;
+      el.offsetHeight; // force repaint
+      el.style.transform = "translateY(0)";
+      el.classList.add(delta > 0 ? "moving-up" : "moving-down");
     }
-
-    // Flexbox ranking
-    houses[key].style.order = newIndex;
   });
 
-  previousOrder = currentOrder;
+  // 6️⃣ glow first place
+  houses[sorted[0].key].classList.add("first");
 });
