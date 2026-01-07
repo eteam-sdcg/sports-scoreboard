@@ -1,7 +1,6 @@
 import { db } from "./firebase.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// House elements
 const houses = {
   opal: document.querySelector(".house.opal"),
   crystal: document.querySelector(".house.crystal"),
@@ -9,7 +8,6 @@ const houses = {
   sapphire: document.querySelector(".house.sapphire"),
 };
 
-// Score spans
 const scores = {
   opal: houses.opal.querySelector(".score"),
   crystal: houses.crystal.querySelector(".score"),
@@ -17,8 +15,10 @@ const scores = {
   sapphire: houses.sapphire.querySelector(".score"),
 };
 
-// Firebase
 const scoresRef = ref(db, "totalScores");
+
+// Track previous order
+let previousOrder = [];
 
 onValue(scoresRef, (snapshot) => {
   const data = snapshot.val();
@@ -29,7 +29,7 @@ onValue(scoresRef, (snapshot) => {
     scores[key].textContent = data[key] ?? 0;
   });
 
-  // Sort highest → lowest
+  // Sort by score (high → low)
   const sorted = Object.keys(houses)
     .map((key) => ({
       key,
@@ -37,8 +37,25 @@ onValue(scoresRef, (snapshot) => {
     }))
     .sort((a, b) => b.score - a.score);
 
-  // APPLY RANKING USING CSS ORDER
-  sorted.forEach((item, index) => {
-    houses[item.key].style.order = index;
+  const currentOrder = sorted.map(item => item.key);
+
+  // Apply animation direction
+  currentOrder.forEach((key, newIndex) => {
+    const oldIndex = previousOrder.indexOf(key);
+
+    houses[key].classList.remove("moving-up", "moving-down");
+
+    if (oldIndex !== -1) {
+      if (newIndex < oldIndex) {
+        houses[key].classList.add("moving-up");
+      } else if (newIndex > oldIndex) {
+        houses[key].classList.add("moving-down");
+      }
+    }
+
+    // Flexbox ranking
+    houses[key].style.order = newIndex;
   });
+
+  previousOrder = currentOrder;
 });
