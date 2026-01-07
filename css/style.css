@@ -235,4 +235,13 @@ body {
 .house.moving-down {
   background-color: rgba(255, 0, 0, 0.08);
 }
+@media (max-width: 480px) {
+  .athletic-bg {
+    top: 90px;
+    right: -120px;   /* push more outside */
+    width: 300px;
+    opacity: 0.25;   /* lighter on mobile */
+  }
+}
+
 
