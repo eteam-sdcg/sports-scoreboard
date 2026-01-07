@@ -1,9 +1,6 @@
 import { db } from "./firebase.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Parent container (THIS MATCHES YOUR HTML)
-const container = document.querySelector(".scoreboard");
-
 // House elements
 const houses = {
   opal: document.querySelector(".house.opal"),
@@ -20,13 +17,8 @@ const scores = {
   sapphire: houses.sapphire.querySelector(".score"),
 };
 
-// Sound (optional)
-const rankSound = document.getElementById("rankSound");
-
-// Firebase listener
+// Firebase
 const scoresRef = ref(db, "totalScores");
-
-let lastOrder = [];
 
 onValue(scoresRef, (snapshot) => {
   const data = snapshot.val();
@@ -45,16 +37,8 @@ onValue(scoresRef, (snapshot) => {
     }))
     .sort((a, b) => b.score - a.score);
 
-  const newOrder = sorted.map(item => item.key).join(",");
-
-  // Play sound only if ranking changed
-  if (newOrder !== lastOrder.join(",")) {
-    rankSound?.play().catch(() => {});
-    lastOrder = newOrder.split(",");
-  }
-
-  // Reorder DOM
-  sorted.forEach(({ key }) => {
-    container.appendChild(houses[key]);
+  // APPLY RANKING USING CSS ORDER
+  sorted.forEach((item, index) => {
+    houses[item.key].style.order = index;
   });
 });
