@@ -52,13 +52,15 @@ body {
 ===================== */
 .athletic-bg {
   position: absolute;
-  top: 160px;
-  left: -50px;
-  width: 480px;
+  top: 120px;
+  right: -80px;        /* stick to right corner */
+  width: 360px;
+  max-width: 90vw;     /* responsive */
   opacity: 0.35;
-  z-index: 3;
-  animation: floatLogo 5s ease-in-out infinite;
+  z-index: 1;
+  pointer-events: none;
 }
+
 
 @keyframes floatLogo {
   0% { transform: translateY(0); }
@@ -233,3 +235,4 @@ body {
 .house.moving-down {
   background-color: rgba(255, 0, 0, 0.08);
 }
+
