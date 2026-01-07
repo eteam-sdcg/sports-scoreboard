@@ -1,9 +1,10 @@
 import { db } from "./firebase.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-const container = document.querySelector(".houses"); // parent container
+// Parent container (THIS MATCHES YOUR HTML)
+const container = document.querySelector(".scoreboard");
 
-// Map house name → element
+// House elements
 const houses = {
   opal: document.querySelector(".house.opal"),
   crystal: document.querySelector(".house.crystal"),
@@ -11,7 +12,7 @@ const houses = {
   sapphire: document.querySelector(".house.sapphire"),
 };
 
-// Score elements
+// Score spans
 const scores = {
   opal: houses.opal.querySelector(".score"),
   crystal: houses.crystal.querySelector(".score"),
@@ -19,8 +20,13 @@ const scores = {
   sapphire: houses.sapphire.querySelector(".score"),
 };
 
+// Sound (optional)
+const rankSound = document.getElementById("rankSound");
+
 // Firebase listener
 const scoresRef = ref(db, "totalScores");
+
+let lastOrder = [];
 
 onValue(scoresRef, (snapshot) => {
   const data = snapshot.val();
@@ -31,13 +37,21 @@ onValue(scoresRef, (snapshot) => {
     scores[key].textContent = data[key] ?? 0;
   });
 
-  // ---- RANKING LOGIC ----
-  const sorted = Object.keys(data)
+  // Sort highest → lowest
+  const sorted = Object.keys(houses)
     .map((key) => ({
       key,
       score: data[key] ?? 0,
     }))
     .sort((a, b) => b.score - a.score);
+
+  const newOrder = sorted.map(item => item.key).join(",");
+
+  // Play sound only if ranking changed
+  if (newOrder !== lastOrder.join(",")) {
+    rankSound?.play().catch(() => {});
+    lastOrder = newOrder.split(",");
+  }
 
   // Reorder DOM
   sorted.forEach(({ key }) => {
