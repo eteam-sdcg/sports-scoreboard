@@ -1,24 +1,46 @@
 import { db } from "./firebase.js";
 import { ref, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
 
-// Select score elements (order matches your HTML)
-const scoreElements = {
-  opal: document.querySelector(".house.opal .score"),
-  crystal: document.querySelector(".house.crystal .score"),
-  diamond: document.querySelector(".house.diamond .score"),
-  sapphire: document.querySelector(".house.sapphire .score"),
+const container = document.querySelector(".houses"); // parent container
+
+// Map house name → element
+const houses = {
+  opal: document.querySelector(".house.opal"),
+  crystal: document.querySelector(".house.crystal"),
+  diamond: document.querySelector(".house.diamond"),
+  sapphire: document.querySelector(".house.sapphire"),
 };
 
-// Listen to Firebase
+// Score elements
+const scores = {
+  opal: houses.opal.querySelector(".score"),
+  crystal: houses.crystal.querySelector(".score"),
+  diamond: houses.diamond.querySelector(".score"),
+  sapphire: houses.sapphire.querySelector(".score"),
+};
+
+// Firebase listener
 const scoresRef = ref(db, "totalScores");
 
 onValue(scoresRef, (snapshot) => {
   const data = snapshot.val();
-
   if (!data) return;
 
-  scoreElements.opal.textContent = data.opal ?? 0;
-  scoreElements.crystal.textContent = data.crystal ?? 0;
-  scoreElements.diamond.textContent = data.diamond ?? 0;
-  scoreElements.sapphire.textContent = data.sapphire ?? 0;
+  // Update numbers
+  Object.keys(scores).forEach((key) => {
+    scores[key].textContent = data[key] ?? 0;
+  });
+
+  // ---- RANKING LOGIC ----
+  const sorted = Object.keys(data)
+    .map((key) => ({
+      key,
+      score: data[key] ?? 0,
+    }))
+    .sort((a, b) => b.score - a.score);
+
+  // Reorder DOM
+  sorted.forEach(({ key }) => {
+    container.appendChild(houses[key]);
+  });
 });
