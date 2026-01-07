@@ -8,7 +8,7 @@
 }
 
 /* =====================
-   BODY BACKGROUND
+   BODY
 ===================== */
 body {
   min-height: 100vh;
@@ -29,47 +29,36 @@ body {
 }
 
 /* =====================
-   TOP LOGO (sdcg)
+   TOP LOGO
 ===================== */
 .logo-top {
   text-align: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
+  z-index: 3;
+  position: relative;
 }
-
-.logo-top img {
-  width: 80px;
-  max-width: 100%;
-}
-
 
 .logo-top img {
   width: 100px;
+  max-width: 100%;
 }
 
 /* =====================
-   ATHLETIC LOGO
-   (BACKGROUND DECOR)
+   ATHLETIC BACKGROUND
+   (CORNER LOCKED)
 ===================== */
 .athletic-bg {
   position: absolute;
-  top: 120px;
-  right: -80px;        /* stick to right corner */
+  top: 110px;
+  right: -150px;
   width: 360px;
-  max-width: 90vw;     /* responsive */
-  opacity: 0.35;
+  opacity: 0.28;
   z-index: 1;
   pointer-events: none;
 }
 
-
-@keyframes floatLogo {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(20px); }
-  100% { transform: translateY(0); }
-}
-
 /* =====================
-   TITLES
+   TITLE
 ===================== */
 .title {
   text-align: center;
@@ -79,19 +68,19 @@ body {
 }
 
 .title .small {
-  letter-spacing: 7px;
   font-size: 15px;
+  letter-spacing: 7px;
+  opacity: 0.9;
 }
 
 .title .main {
-  margin-top: 0px;
   font-family: 'Franklin Gothic Demi', sans-serif;
   font-size: 40px;
   font-weight: bold;
 }
 
 /* =====================
-   SCORE LIST
+   SCOREBOARD
 ===================== */
 .scoreboard {
   margin-top: 25px;
@@ -100,10 +89,10 @@ body {
   gap: 16px;
   position: relative;
   z-index: 2;
- }
+}
 
 /* =====================
-   SCORE ROW
+   HOUSE ROW
 ===================== */
 .house {
   display: flex;
@@ -113,6 +102,8 @@ body {
   border-radius: 40px;
   font-family: "Bell MT", serif;
   font-size: 25px;
+  transition: transform 0.6s ease, box-shadow 0.6s ease;
+  will-change: transform;
 }
 
 /* =====================
@@ -147,11 +138,28 @@ body {
 }
 
 /* =====================
+   FIRST PLACE GLOW
+===================== */
+.house.first {
+  box-shadow: 0 0 22px 6px rgba(255, 255, 255, 0.85);
+  animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    box-shadow: 0 0 14px 4px rgba(255, 255, 255, 0.6);
+  }
+  to {
+    box-shadow: 0 0 24px 10px rgba(255, 255, 255, 1);
+  }
+}
+
+/* =====================
    FOOTER LOGO
 ===================== */
 .footer-logo {
- text-align: center;
-  margin-bottom: 10px;
+  text-align: center;
+  margin-top: 25px;
 }
 
 .footer-logo img {
@@ -159,7 +167,7 @@ body {
 }
 
 /* =====================
-   DESKTOP SUPPORT
+   DESKTOP VIEW
 ===================== */
 @media (min-width: 768px) {
   .container {
@@ -167,81 +175,33 @@ body {
   }
 
   .athletic-bg {
+    top: 140px;
+    right: -120px;
     width: 520px;
-    left: -180px;
+    opacity: 0.35;
   }
 
   .title .main {
     font-size: 38px;
   }
 }
-/* =====================
-   RANK MOVE ANIMATION
-===================== */
-.house {
-  transition: transform 0.6s ease, box-shadow 0.6s ease;
-}
 
 /* =====================
-   FIRST PLACE GLOW
+   MOBILE VIEW
 ===================== */
-.house.first {
-  box-shadow: 0 0 25px 8px rgba(255, 255, 255, 0.8);
-  animation: glow 4s infinite alternate;
-}
-
-@keyframes glow {
-  from {
-    box-shadow: 0 0 15px 4px rgb(255, 255, 255);
-  }
-  to {
-    box-shadow: 0 0 20px 10px rgb(255, 255, 255);
-  }
-}
-
-/* RESPONSIVE FIX
-===================*/
 @media (max-width: 480px) {
-
-  .athletic-bg {
-    width: 100%;
-    max-width: 320px;
-    left: 50%;
-    transform: translateX(-50%);
-    top: 140px;
-  }
-
   .container {
-    width: 100%;
-    padding: 15px;
+    padding: 16px;
   }
-}
-/* Smooth ranking animation */
-.scoreboard {
-  display: flex;
-  flex-direction: column;
-}
 
-.house {
-  transition: transform 0.6s ease, background-color 0.4s ease;
-  will-change: transform;
-}
-
-/* Optional: highlight movement */
-.house.moving-up {
-  background-color: rgba(0, 255, 0, 0.08);
-}
-
-.house.moving-down {
-  background-color: rgba(255, 0, 0, 0.08);
-}
-@media (max-width: 480px) {
   .athletic-bg {
     top: 90px;
-    right: -120px;   /* push more outside */
+    right: -190px;
     width: 300px;
-    opacity: 0.25;   /* lighter on mobile */
+    opacity: 0.22;
+  }
+
+  .title .main {
+    font-size: 34px;
   }
 }
-
-
